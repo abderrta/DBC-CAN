@@ -1,0 +1,83 @@
+VERSION ""
+
+
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_: ABS GSM ECM CGW
+VAL_TABLE_ VT_EngineStatusType 3 "Engine Running" 2 "Engine Cranking" 1 "Engine Stalling" 0 "Engine OFF" ;
+VAL_TABLE_ VT_BrakeStatusType 3 "Brake pressed suddenly" 2 "Brake pressed Moderately" 1 "Brake pressed Slowly" 0 "Brake Not pressed" ;
+VAL_TABLE_ VT_CrashSideType 7 "Invalid" 6 "Rear" 5 "Front" 4 "Right Rear" 3 "Right Front" 2 "Left Rear" 1 "Left Front" 0 "No Crash Occured" ;
+VAL_TABLE_ VT_CrashSeverityType 3 "Severe Crash " 2 "Medium Crash" 1 "Mild crash " 0 "No Crash occurred" ;
+
+
+BO_ 472 EngInfo: 6 ECM
+ SG_ EngineTemp : 16|8@1+ (1,-40) [-40|215] "degree celcius"  GSM
+ SG_ EngineSpeed : 4|8@1+ (100,0) [0|10000] "rpm"  GSM,ABS
+ SG_ EngineSts : 0|2@1+ (1,0) [0|3] ""  GSM,ABS
+
+BO_ 692 Brake_Info: 8 ABS
+ SG_ BrakePedalAngle : 32|8@1+ (0.5,0) [0|120] "degree"  GSM,CGW
+ SG_ Brake_Time : 8|16@1+ (0.2,0) [0|10000] "seconds"  GSM,ECM,CGW
+ SG_ BrakeSts : 0|2@1+ (1,0) [0|3] ""  GSM,ECM,CGW
+
+BO_ 162 Crash_Info: 2 CGW
+ SG_ Crash_Side : 4|3@1+ (1,0) [0|7] ""  ABS
+ SG_ Crash_Severity : 0|2@1+ (1,0) [0|3] ""  ECM,ABS
+
+
+
+CM_ BO_ 472 "Engine related information";
+CM_ SG_ 472 EngineTemp "Tells the temperature of Engine";
+CM_ SG_ 472 EngineSpeed "Tells the engine speed in rpm";
+CM_ SG_ 472 EngineSts "Engine running status";
+CM_ BO_ 692 "Brake related information";
+CM_ SG_ 692 BrakePedalAngle "How much Brake pedal is pressed";
+CM_ SG_ 692 Brake_Time "How long is brake pressed";
+CM_ SG_ 692 BrakeSts "Brake status if its pressed or not";
+CM_ BO_ 162 "From Airbag ECU, forwarded by CGW. Contains crash information";
+CM_ SG_ 162 Crash_Side "Tells which side crash occurred";
+CM_ SG_ 162 Crash_Severity "Tells if crash occurred and severity";
+BA_DEF_ BO_  "GenMsgCycleTime" INT 0 65535;
+BA_DEF_  "MultiplexExtEnabled" ENUM  "No","Yes";
+BA_DEF_  "BusType" STRING ;
+BA_DEF_DEF_  "GenMsgCycleTime" 0;
+BA_DEF_DEF_  "MultiplexExtEnabled" "No";
+BA_DEF_DEF_  "BusType" "CAN";
+BA_ "GenMsgCycleTime" BO_ 472 20;
+BA_ "GenMsgCycleTime" BO_ 692 100;
+BA_ "GenMsgCycleTime" BO_ 162 5;
+VAL_ 472 EngineSts 3 "Engine Running" 2 "Engine Cranking" 1 "Engine Stalling" 0 "Engine OFF" ;
+VAL_ 692 BrakeSts 3 "Brake pressed suddenly" 2 "Brake pressed Moderately" 1 "Brake pressed Slowly" 0 "Brake Not pressed" ;
+VAL_ 162 Crash_Side 7 "Invalid" 6 "Rear" 5 "Front" 4 "Right Rear" 3 "Right Front" 2 "Left Rear" 1 "Left Front" 0 "No Crash Occured" ;
+VAL_ 162 Crash_Severity 3 "Severe Crash " 2 "Medium Crash" 1 "Mild crash " 0 "No Crash occurred" ;
+
