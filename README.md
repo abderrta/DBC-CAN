@@ -1,0 +1,1 @@
+I created this DBC file using CAN DB Editor to discover the main elements of a DBC file, such as ECU nodes, CAN messages, message identifiers, signals, bit positions, scaling factors, offsets, units, value tables, and attributes.
